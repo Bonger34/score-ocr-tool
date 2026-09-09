@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<title>字体与配色样张</title>
+<style>
+  :root{
+    --paper:#EAEDE7; --sheet:#FCFDFA; --ink:#17231F; --ink2:#55605A; --rule:#CDD5CC;
+    --brand:#1E4D3F; --seal:#9C2B23;
+    --deyu:#2B5D8A; --meiyu:#9A6B1F; --laoyu:#4E7A46;
+  }
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Microsoft YaHei UI","Microsoft YaHei",sans-serif;padding:24px;}
+  h1{font-family:"Noto Serif SC","Source Han Serif SC",SimSun,serif;font-weight:700;font-size:26px;margin:0 0 4px;}
+  h2{font-size:12px;color:var(--ink2);margin:26px 0 10px;font-weight:600;letter-spacing:.06em;}
+  .row{display:flex;gap:16px;flex-wrap:wrap;align-items:baseline;}
+  .card{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;}
+  .tag{font-size:11px;color:var(--ink2);display:block;margin-bottom:8px;}
+  .t-serif{font-family:"Noto Serif SC","Source Han Serif SC",SimSun,serif;}
+  .t-yahei{font-family:"Microsoft YaHei UI","Microsoft YaHei",sans-serif;}
+  .t-hei{font-family:SimHei,"Microsoft YaHei",sans-serif;}
+  .t-source{font-family:"Source Han Sans SC","Noto Sans SC","Microsoft YaHei",sans-serif;}
+  .t-deng{font-family:"DengXian","Microsoft YaHei",sans-serif;}
+  .t-alibaba{font-family:"Alibaba PuHuiTi 3.0","AlibabaPuHuiTi-3-45-Light","Microsoft YaHei",sans-serif;}
+  .t-kai{font-family:STKaiti,KaiTi,serif;}
+  .big{font-size:30px;font-weight:700;line-height:1.2;}
+  .mid{font-size:17px;font-weight:600;}
+  .small{font-size:13px;line-height:1.7;}
+  .xs{font-size:11px;color:var(--ink2);}
+  .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+  /* 配色试排 */
+  .sw{display:flex;gap:10px;flex-wrap:wrap;}
+  .sw div{width:132px;border-radius:8px;padding:12px;font-size:12px;line-height:1.5;}
+  .ledger{display:flex;gap:0;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;overflow:hidden;}
+  .ledger>div{flex:1;padding:14px 18px;border-right:1px solid var(--rule);}
+  .ledger>div:last-child{border-right:0;}
+  .ledger .n{font-family:"Noto Serif SC","Source Han Serif SC",serif;font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1;}
+  .ledger .l{font-size:11px;color:var(--ink2);margin-top:6px;}
+  .comp{height:6px;border-radius:3px;overflow:hidden;display:flex;background:#E4E9E2;margin-top:12px;}
+  .comp i{display:block;height:100%;}
+  .job{background:var(--ink);color:#F3F6F1;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:22px;}
+  .job .pct{font-family:"Noto Serif SC","Source Han Serif SC",serif;font-size:34px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;}
+  .job .track{flex:1;height:6px;background:rgba(255,255,255,.16);border-radius:3px;overflow:hidden;}
+  .job .track i{display:block;height:100%;width:37%;background:#7FBFA4;}
+  .job .meta{font-size:12px;color:#B9C7BE;margin-top:8px;font-variant-numeric:tabular-nums;}
+  table{border-collapse:collapse;width:100%;font-size:13px;background:var(--sheet);}
+  th{background:var(--ink);color:#F3F6F1;text-align:left;padding:10px 12px;font-size:12px;font-weight:600;}
+  td{padding:10px 12px;border-bottom:1px solid var(--rule);}
+  td.r{text-align:right;font-variant-numeric:tabular-nums;}
+  .btn{background:var(--brand);color:#fff;border:0;border-radius:8px;padding:11px 22px;font-size:14px;font-weight:600;font-family:inherit;}
+  .warn{border-left:3px solid var(--seal);background:#FBF3F1;padding:10px 14px;font-size:12.5px;color:#6B2A22;}
+</style></head><body>
+<h1>搜分名单查询</h1>
+<div class="xs">字体/配色样张 · 用于定稿视觉方向</div>
+
+<h2>标题候选（30px/700）</h2>
+<div class="row">
+  <div class="card"><span class="tag">Noto Serif SC 思源宋体</span><span class="big t-serif">加分名单核对</span></div>
+  <div class="card"><span class="tag">Microsoft YaHei</span><span class="big t-yahei">加分名单核对</span></div>
+  <div class="card"><span class="tag">SimHei 黑体</span><span class="big t-hei">加分名单核对</span></div>
+  <div class="card"><span class="tag">Source Han Sans 思源黑体</span><span class="big t-source">加分名单核对</span></div>
+  <div class="card"><span class="tag">STKaiti 楷体</span><span class="big t-kai">加分名单核对</span></div>
+</div>
+
+<h2>正文候选（13px 表格内文）</h2>
+<div class="row">
+  <div class="card" style="max-width:300px"><span class="tag">Microsoft YaHei UI</span><div class="small t-yahei">2025-2026学年学生干部考核结果（班级）· 德育 +1.5 · 学号 2023114020317</div></div>
+  <div class="card" style="max-width:300px"><span class="tag">Source Han Sans SC</span><div class="small t-source">2025-2026学年学生干部考核结果（班级）· 德育 +1.5 · 学号 2023114020317</div></div>
+  <div class="card" style="max-width:300px"><span class="tag">DengXian 等线</span><div class="small t-deng">2025-2026学年学生干部考核结果（班级）· 德育 +1.5 · 学号 2023114020317</div></div>
+  <div class="card" style="max-width:300px"><span class="tag">Alibaba PuHuiTi 3.0</span><div class="small t-alibaba">2025-2026学年学生干部考核结果（班级）· 德育 +1.5 · 学号 2023114020317</div></div>
+</div>
+
+<h2>配色（纸面 / 墨 / 松绿 / 印泥 / 三育）</h2>
+<div class="sw">
+  <div style="background:#EAEDE7;border:1px solid #CDD5CC;color:#17231F">paper<br>#EAEDE7</div>
+  <div style="background:#FCFDFA;border:1px solid #CDD5CC;color:#17231F">sheet<br>#FCFDFA</div>
+  <div style="background:#17231F;color:#F3F6F1">ink<br>#17231F</div>
+  <div style="background:#1E4D3F;color:#fff">brand 松墨绿<br>#1E4D3F</div>
+  <div style="background:#9C2B23;color:#fff">seal 印泥红<br>#9C2B23</div>
+  <div style="background:#2B5D8A;color:#fff">德育 靛青<br>#2B5D8A</div>
+  <div style="background:#9A6B1F;color:#fff">美育 赭黄<br>#9A6B1F</div>
+  <div style="background:#4E7A46;color:#fff">劳育 橄榄<br>#4E7A46</div>
+</div>
+
+<h2>结果台账（ledger）+ 构成条</h2>
+<div class="ledger">
+  <div><div class="n">5</div><div class="l">命中文件</div></div>
+  <div><div class="n" style="color:var(--deyu)">3.0</div><div class="l">德育 · 3 条</div></div>
+  <div><div class="n" style="color:var(--meiyu)">1.5</div><div class="l">美育 · 1 条</div></div>
+  <div><div class="n" style="color:var(--laoyu)">0</div><div class="l">劳育 · 0 条</div></div>
+  <div><div class="n">4.5</div><div class="l">加分合计 · 4 条</div></div>
+</div>
+<div class="comp"><i style="width:66.7%;background:var(--deyu)"></i><i style="width:33.3%;background:var(--meiyu)"></i></div>
+
+<h2>运行中：作业条</h2>
+<div class="job">
+  <div class="pct">37<span style="font-size:16px">%</span></div>
+  <div style="flex:1">
+    <div class="track"><i></i></div>
+    <div class="meta">正在解析 812 / 2202 · 已用 2:11 · 预计剩余 3:44</div>
+  </div>
+</div>
+
+<h2>明细表 + 警示 + 按钮</h2>
+<div class="warn">检出本次命中记录存在 2 个不同学号，姓名与学号并非一一对应，可能存在同名不同人，请人工核对学号栏目。</div>
+<table style="margin-top:12px">
+  <tr><th>文件</th><th>加分类型</th><th style="text-align:right">分值</th><th>学号</th></tr>
+  <tr><td>2025-2026学年学生干部考核结果（班级）.xlsx</td><td style="color:var(--deyu)">德育</td><td class="r">+1.5</td><td>2023114020317</td></tr>
+  <tr><td>院团组织-1月份加分文件（最终版）.zip</td><td style="color:var(--meiyu)">美育</td><td class="r">+0.5</td><td>—</td></tr>
+  <tr><td style="font-weight:700">合计</td><td></td><td class="r" style="font-weight:700">+4.5</td><td></td></tr>
+</table>
+<div style="margin-top:14px"><button class="btn">开始解析</button></div>
+</body></html>

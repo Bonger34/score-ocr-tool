@@ -1,0 +1,19 @@
+# 统一按 LF 存库与检出，保证构建可复现：build_v25_ui.py 会把 .tools/ui/ 下的源码
+# 整块替换进 42MB 基线 HTML，任何换行符差异都会改变成品 sha256。
+* text=auto eol=lf
+
+# 42MB 构建底座：按二进制处理，避免 git 当文本做行尾转换与 diff
+.tools/v24_ui_baseline.html binary
+
+# 二进制：不做行尾与差异处理
+*.pdf binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.onnx binary
+*.zip binary
+*.xlsx binary
+
+# 生成物 / 数据目录不参与 GitHub 语言统计
+target/** linguist-vendored
+.samples/** linguist-vendored

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>检索结果 UI 预览 · 搜分名单查询</title>
+<!--
+  合成数据 UI 预览：直接加载 .tools/ui/style.css 与 .tools/ui/render.js 的真实源码，
+  喂一组编造的名单记录，用来在不开 44MB 成品、不碰真实语料的前提下看结果区长什么样。
+  同时也是 README 截图的唯一来源——真实数据的截图含姓名/学号，不能公开。
+  用法: 用本地服务器打开（file:// 下 fetch 与模块限制较多）
+        python -m http.server 18010 --bind 127.0.0.1
+        然后访问 http://127.0.0.1:18010/.tools/demo/ui_demo.html
+-->
+<link rel="stylesheet" href="../ui/style.css">
+<style>
+  /* 仅预览页自身的排版：结果区之外的部分保持与成品一致 */
+  .demo-note{margin:0 0 14px;padding:10px 14px;border-left:3px solid var(--rule);
+              background:var(--sheet);color:var(--ink2);font-size:12.5px;line-height:1.7;border-radius:0 8px 8px 0}
+</style>
+</head><body>
+<div class="page">
+  <header class="masthead">
+    <h1>搜分名单查询</h1>
+    <p>名单文件不上传，全部在本机解析。</p>
+  </header>
+
+  <main>
+    <p class="demo-note">这是<b>合成数据预览页</b>：下面的记录全部是编造的，用于查看结果区排版。真实运行请用成品 HTML。</p>
+    <!-- 成品里 #resultCard 默认 display:none，由应用 JS 在出结果时打开；预览页直接写死展开 -->
+    <section class="sheet" id="resultCard" style="display:block">
+      <div class="result-head">
+        <h2 class="sheet-h">检索结果</h2>
+        <div class="result-acts">
+          <button type="button" id="dlzip" title="按 学号姓名/五育测评/+分值 (事由) 的目录结构打包">导出材料包</button>
+          <button type="button" id="dlxlsx">导出 Excel 汇总</button>
+        </div>
+      </div>
+      <div id="summary"></div>
+      <div id="detail"></div>
+      <div id="dupbox" style="display:none"></div>
+    </section>
+  </main>
+
+  <footer>数据只在本机浏览器里处理，不会上传到任何服务器。</footer>
+</div>
+
+<script>
+// ---- 成品里的全局工具函数，这里用等价实现顶替（保持 render.js 源码零改动）----
+function $(id) { return document.getElementById(id); }
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+// 从 "德育+10" 里取育别，与成品 parseType 同逻辑
+function parseType(score) {
+  if (!score) return '';
+  var m = /^([^\d+\-＋]+)/.exec(score);
+  return m ? m[1] : score;
+}
+function setupDownload() {}          // 预览页不导出，占位即可
+var lastStats = null;
+</script>
+<script src="../ui/render.js"></script>
+<script>
+// ---- 合成数据：覆盖五育齐全 / 德育超 25 / 智育超 10 / 负分 / 无学号 / 无分值 ----
+var keep = [
+  {
+    name: '德育测评/校级志愿服务时长汇总.pdf',
+    act: '在校志愿时长累计 101.44',
+    records: [
+      { score: '德育+18', serial: '2024000001' },
+      { score: '德育+9',  serial: '2024000001' },   // 合计 27 → 触发 25 分上限提醒
+      { score: '智育+6',  serial: '2024000001' },
+      { score: '智育+5',  serial: '2024000001' },   // 合计 11 → 触发 10 分上限提醒
+      { score: '体育+2',  serial: '2024000001' },
+    ],
+  },
+  {
+    name: '美育/宿舍文化活动参与名单.xlsx',
+    act: '宿舍文化活动（集体项目）',
+    records: [
+      { score: '美育+1.5', serial: '2024000001' },
+      { score: '劳育+3',   serial: '2024000001' },
+      { score: '美育+2',   serial: '2024000002' },
+      { score: '劳育-0.5', serial: '2024000002' },  // 负分写法
+    ],
+  },
+  {
+    name: '体育/运动会方阵名单.pdf',
+    act: '校运动会方阵',
+    records: [
+      { score: '体育+1', serial: '2024000002' },
+      { score: '德育+1', serial: null },            // 未标学号 → 单独成组
+      { score: null,     serial: null },            // 没识别到分值 → 显示占位
+    ],
+  },
+];
+render(keep, [], false, '张');   // 模糊匹配"张"，命中 3 个人，顺带演示同名不同人提醒
+</script>
+</body></html>

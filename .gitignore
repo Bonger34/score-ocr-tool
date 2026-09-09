@@ -1,0 +1,84 @@
+# ==============================================================================
+# 搜分名单查询工具 · 发布仓库忽略规则
+# 原则：真实数据（姓名 / 学号 / 原始名单）与重资产一律不入库；
+#       仓库只保留可复现的源码、校验脚本与文档。
+# 注意：git 不支持行尾注释，注释一律单独成行，否则整行会被当成模式。
+# ==============================================================================
+
+# ---------- 真实数据：绝对不入库 ----------
+# 真实加分名单语料（含姓名 / 学号）
+target/
+# 真实名单样本 PDF
+.samples/
+# 真实数据的运行截图
+.screenshots/
+# 历史交付物与旧版本基线
+.archive/
+.trae-html-share-packages/
+
+# ---------- 内部资料：留在本机，不公开 ----------
+# 规定原文与工作通知（校内文件，且 格式.jpg 含真实学号与姓名）
+notice/
+# 维护者视角的本地文件地图（引用大量本机数据目录）
+工作区索引.md
+# 内部工程过程记录（优化计划、真机实测、交接文档、A/B 报告）
+docs/真机实测报告_OCR_GPU_v2.md
+docs/提升OCR速度优化计划.md
+docs/交接文档_OCR_GPU_v2.md
+docs/交接文档_OCR_GPU_v2.5_UI重构.md
+docs/ocr_ab_bench_report.md
+# 依赖内部规定 PDF 的提取脚本
+.tools/notice_dump.py
+# 维护者一次性操作单与发版说明（发布完即过期）
+docs/发布流程.md
+.github/release_notes_*.md
+
+# ---------- 成品与实验重资产（走 Release / 不入库）----------
+# 成品是构建输出，可随时重建，不入库
+搜分名单查询工具.html
+.tools/*.onnx
+.tools/*.zip
+.tools/*.xlsx
+.tools/ort_bundle.js
+.tools/ppu_engine_extracted.js
+.tools/dict.txt
+.tools/app_v23.js
+.tools/corpus_text_all.txt
+# 隐私门禁的真值缓存，内含真实姓名，禁止入库
+.tools/pii_truth.json
+
+# ---------- .tools 采用白名单：默认全忽略，只放行可复现的部分 ----------
+# 好处：以后往 .tools/ 里丢进任何含真实数据的实验产物，都不会被误提交。
+.tools/*
+!.tools/README.md
+!.tools/build_v24.py
+!.tools/build_v25_ui.py
+# 构建输入（42MB 底座）：应用内核 + 内嵌模型/第三方库，构建必需，故入库
+!.tools/v24_ui_baseline.html
+!.tools/render_unit.js
+!.tools/launcher_check.py
+!.tools/publish_check.py
+!.tools/syntax_check.py
+!.tools/rebuild_share_zip.py
+!.tools/ui_a11y.py
+!.tools/ui_barsync.py
+!.tools/ui_contrast.py
+!.tools/ui_pii_check.py
+!.tools/ui_pii_scan.py
+!.tools/ui_regress.py
+!.tools/ui_shot.py
+!.tools/ui_static_check.py
+!.tools/ui_zipcheck.py
+!.tools/shot_demo.py
+!.tools/demo/
+!.tools/ui/
+
+# ---------- 通用垃圾 ----------
+__pycache__/
+*.pyc
+*.log
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
