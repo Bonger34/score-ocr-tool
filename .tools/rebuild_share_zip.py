@@ -4,7 +4,9 @@ import os, sys, zipfile
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(BASE, '.trae-html-share-packages', '搜分名单查询工具.zip')
+# 附件名必须是纯 ASCII：GitHub 会把非 ASCII 附件名重置为 default.zip，
+# 中文显示名交给 Release 的 label 字段（见 docs/发布流程.md）
+OUT = os.path.join(BASE, '.trae-html-share-packages', 'score-ocr-tool.zip')
 FILES = ['搜分名单查询工具.html', '启动本地服务.cmd', '直接打开页面.cmd', '本地服务_无Python.ps1']
 
 with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
