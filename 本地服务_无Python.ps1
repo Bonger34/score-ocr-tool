@@ -16,7 +16,8 @@ if($Page -eq '' -or $Page -eq $null){
 $l=New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,$Port)
 $l.Start()
 Write-Host ('Serving  http://127.0.0.1:{0}/{1}' -f $Port,$Page)
-Write-Host 'Press Ctrl+C to stop.'
+Write-Host 'The server runs in THIS window. Close this window (or press Ctrl+C) to stop it.'
+Write-Host '关掉本窗口即停止服务；已经打开的页面不受影响。'
 # v2.2：优先用带 --force_high_performance_gpu 的 Chrome/Edge 打开——双显卡笔记本上
 # 浏览器默认把 GPU 进程放在核显上，WebGPU 会跟着跑核显，识别速度慢数倍且更易驱动异常。
 try{
@@ -36,6 +37,9 @@ while($true){
   $c=$l.AcceptTcpClient()
   $s=$c.GetStream()
   try{
+    # 5 秒读超时：浏览器可能先开一条空闲连接(preconnect)却不发请求，
+    # 单线程服务器没有超时就会被它卡死，后面的页面请求永远等不到响应。
+    $s.ReadTimeout=5000
     $rd=New-Object IO.StreamReader($s)
     $line=$rd.ReadLine()
     if($line){
