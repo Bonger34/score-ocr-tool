@@ -56,30 +56,23 @@
 ### 给使用者：直接用成品
 
 1. 打开 [Releases](../../releases) 页，下载附件 `score-ocr-tool.zip`（约 28 MB，**唯一的附件**）
-2. 解压到一个空文件夹——里面有成品 HTML 和 3 个启动器
-3. 双击 `直接打开页面.cmd`（推荐）或 `启动本地服务.cmd`
+2. 解压到一个空文件夹——里面是成品 HTML 和启动器 `直接打开页面.cmd`
+3. 双击 `直接打开页面.cmd`（也可以直接双击 HTML，见下）
 4. 把名单文件（或整个 zip）拖进页面 → 输入姓名 → 点「开始解析」
 
 > 成品体积大是因为 OCR 模型与全部第三方库都内嵌在文件里——这正是它离线可用的原因。
-> 两个启动器都会用 `--force_high_performance_gpu` 让 WebGPU 走独立显卡，也都**不会留下后台进程**：
+> `直接打开页面.cmd` 只替你做一件事：用 `--force_high_performance_gpu` 启动 Chrome / Edge，
+> 让 WebGPU 走独立显卡（双显卡笔记本上浏览器默认往往挑核显）。它不起服务、不驻留后台进程。
 >
-> - `直接打开页面.cmd`——不起服务，直接 `file://` 打开，最省事（推荐）。
-> - `启动本地服务.cmd`——起 `127.0.0.1:18010` 本地服务再打开。
->   **服务就跑在这个窗口里**：页面加载完即可关掉它，已打开的页面照常使用；关掉窗口即停止服务。
->   不依赖 Python——用的是 Windows 自带的 PowerShell。
->
-> 两者**功能等价**，不存在「服务方式更完整」这一说：`file://` 下 pdf.js worker、Tesseract 回退、
-> IndexedDB 缓存、Excel / 材料包导出都已实测可用（同一份扫描件、同一引擎对照：`file://` 识别 37.3s、
-> `http://` 识别 39.7s，均为 3 页回退识别、0 条错误）。
-> 保留本地服务只为兜底——个别机器的浏览器策略若禁止打开 `file://` 页面，走服务仍能用。
-> 唯一的实际差别：两种方式的 IndexedDB 缓存各自独立，换一种方式打开，第一次查询要重新解析；
-> 服务方式另外占用 18010 端口。
+> 直接双击 HTML 同样能用：`file://` 下 pdf.js worker、Tesseract 回退、IndexedDB 缓存、
+> Excel / 材料包导出都已实测可用（同一份扫描件、同一引擎对照：`file://` 识别 37.3s、
+> `http://` 识别 39.7s，均 0 条错误），差别只在浏览器会自选 GPU。
 
 校验下载是否完整：
 
 ```powershell
-# 期望 sha256（v2.8）
-0e7c105baca9b3702e008ed8c06e573e40eed913e5d29f53e4a1cd840440dc24
+# 解压后对 HTML 校验，期望 sha256（v2.10）
+195aeead2c3f956fde6a43a68dc6825c91b63fc752456601c89ab14567d4b93c
 ```
 
 ### 给开发者：从源码构建
@@ -155,7 +148,7 @@ python .tools/shot_demo.py        # 重新出图（需 Playwright）
 ## 仓库结构
 
 ```
-├── 启动本地服务.cmd / 直接打开页面.cmd / 本地服务_无Python.ps1
+├── 直接打开页面.cmd             # 唯一的启动器（强制独显打开）
 ├── docs/截图/                   # README 用图（合成数据）
 └── .tools/                      # 源码、构建输入与校验脚本（见 .tools/README.md）
     ├── v24_ui_baseline.html     # 42MB 构建底座：应用内核 + 内嵌模型/第三方库
@@ -184,7 +177,7 @@ python .tools/shot_demo.py        # 重新出图（需 Playwright）
 | 成品隐私 | `python .tools/ui_pii_check.py` | PASS |
 | 启动器编码 | `python .tools/launcher_check.py` | 失败项 0 |
 
-带浏览器实跑的脚本需要先起本地服务器（`启动本地服务.cmd`，默认 127.0.0.1:18010），
+带浏览器实跑的脚本需要先起一个静态服务（`python -m http.server 18010 --bind 127.0.0.1`），
 并需要自备语料放在 `target/`。
 
 ## 隐私设计

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""重打分享包：把交付 HTML + 3 个启动器打成 zip（与旧分享包同名同结构）。"""
+"""重打分享包：把交付 HTML + 启动器打成 zip（与旧分享包同名同结构）。"""
 import os, sys, zipfile
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
@@ -7,7 +7,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 附件名必须是纯 ASCII：GitHub 会把非 ASCII 附件名重置为 default.zip，
 # 中文显示名交给 Release 的 label 字段（见 docs/发布流程.md）
 OUT = os.path.join(BASE, '.trae-html-share-packages', 'score-ocr-tool.zip')
-FILES = ['搜分名单查询工具.html', '启动本地服务.cmd', '直接打开页面.cmd', '本地服务_无Python.ps1']
+FILES = ['搜分名单查询工具.html', '直接打开页面.cmd']
 
 with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
     for n in FILES:
