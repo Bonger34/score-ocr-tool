@@ -56,12 +56,12 @@
 ### 给使用者：直接用成品
 
 1. 打开 [Releases](../../releases) 页，下载附件 `score-ocr-tool.zip`（约 28 MB，**唯一的附件**）
-2. 解压到一个空文件夹——里面是成品 HTML 和启动器 `直接打开页面.cmd`
-3. 双击 `直接打开页面.cmd`（也可以直接双击 HTML，见下）
+2. 解压到一个空文件夹——里面是成品 HTML 和启动器 `打开工具.cmd`
+3. 双击 `打开工具.cmd`（也可以直接双击 HTML，见下）
 4. 把名单文件（或整个 zip）拖进页面 → 输入姓名 → 点「开始解析」
 
 > 成品体积大是因为 OCR 模型与全部第三方库都内嵌在文件里——这正是它离线可用的原因。
-> `直接打开页面.cmd` 只替你做一件事：用 `--force_high_performance_gpu` 启动 Chrome / Edge，
+> `打开工具.cmd` 只替你做一件事：用 `--force_high_performance_gpu` 启动 Chrome / Edge，
 > 让 WebGPU 走独立显卡（双显卡笔记本上浏览器默认往往挑核显）。它不起服务、不驻留后台进程。
 >
 > 直接双击 HTML 同样能用：`file://` 下 pdf.js worker、Tesseract 回退、IndexedDB 缓存、
@@ -71,8 +71,8 @@
 校验下载是否完整：
 
 ```powershell
-# 解压后对 HTML 校验，期望 sha256（v2.10）
-195aeead2c3f956fde6a43a68dc6825c91b63fc752456601c89ab14567d4b93c
+# 解压后对 HTML 校验，期望 sha256（v2.11）
+55ad8f466eaa62d45d0e3446bb6b4b2617f387e0a87167ade879ec8e8d3c6db8
 ```
 
 ### 给开发者：从源码构建
@@ -148,7 +148,7 @@ python .tools/shot_demo.py        # 重新出图（需 Playwright）
 ## 仓库结构
 
 ```
-├── 直接打开页面.cmd             # 唯一的启动器（强制独显打开）
+├── 打开工具.cmd                 # 唯一的启动器（强制独显打开）
 ├── docs/截图/                   # README 用图（合成数据）
 └── .tools/                      # 源码、构建输入与校验脚本（见 .tools/README.md）
     ├── v24_ui_baseline.html     # 42MB 构建底座：应用内核 + 内嵌模型/第三方库

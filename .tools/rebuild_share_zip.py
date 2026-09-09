@@ -7,7 +7,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 附件名必须是纯 ASCII：GitHub 会把非 ASCII 附件名重置为 default.zip，
 # 中文显示名交给 Release 的 label 字段（见 docs/发布流程.md）
 OUT = os.path.join(BASE, '.trae-html-share-packages', 'score-ocr-tool.zip')
-FILES = ['搜分名单查询工具.html', '直接打开页面.cmd']
+FILES = ['搜分名单查询工具.html', '打开工具.cmd']
 
 with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as z:
     for n in FILES:

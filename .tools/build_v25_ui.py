@@ -395,11 +395,12 @@ SRC5_NEW = '      matched.push({name:ent.name, act:activityKey(ent.name), record
 ZIPHOOK_OLD = '  window.exportNow=exportNow; // 供内嵌 onclick="return exportNow()" 调用'
 ZIPHOOK_NEW = ZIP_NEW + '\n' + ZIPHOOK_OLD
 
-# ---------- v2.10：file:// 提示里的启动器名同步 ----------
+# ---------- v2.10 / v2.11：file:// 提示里的启动器名同步 ----------
 # v2.8 把「直接打开_高性能GPU.cmd」改名为「直接打开页面.cmd」，但基线里这句提示没跟着改，
-# 于是直接双击 HTML 的用户会看到一个包里并不存在的文件名（v2.8 / v2.9 的真实缺陷）。
+# 于是直接双击 HTML 的用户会看到一个包里并不存在的文件名（v2.8 / v2.9 的真实缺陷）；
+# v2.11 启动器又更名为「打开工具.cmd」，此处一并同步。
 LAUNCHNAME_OLD = '想用独显请点 直接打开_高性能GPU.cmd'
-LAUNCHNAME_NEW = '想用独显请点 直接打开页面.cmd'
+LAUNCHNAME_NEW = '想用独显请双击 打开工具.cmd'
 
 ANCHORS = [
     ('file://提示启动器名', LAUNCHNAME_OLD, LAUNCHNAME_NEW),
