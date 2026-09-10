@@ -155,6 +155,7 @@ python .tools/shot_demo.py        # 重新出图（需 Playwright）
 ```
 ├── 打开工具.cmd                 # 唯一的启动器（强制独显打开）
 ├── docs/截图/                   # README 用图（合成数据）
+├── docs/maintainer/             # 维护者文档：发版流程、实测报告、交接文档、工作区索引
 └── .tools/                      # 源码、构建输入与校验脚本（见 .tools/README.md）
     ├── build.py                 # 唯一构建入口（纯字节拼接）
     ├── src/template.html        # 约 1KB 骨架，9 个槽位

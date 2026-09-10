@@ -28,13 +28,23 @@
 ├── ui_contrast.py          配色对比度（WCAG 2.1，25 项）
 ├── ui_a11y.py              无障碍专项（键盘可达、焦点、语义，11 项）
 ├── ui_barsync.py           进度条宽度与百分比逐帧一致
+├── ui_nbsp_check.py        状态行分隔符 NBSP 核对
+├── ui_cssom.py             状态行 CSSOM 是否真正生效
 ├── ui_shot.py              浏览器实跑：截图 + Excel/材料包真实下载校验
 ├── ui_zipcheck.py          材料包字节级校验（与源文件逐字节比对）
+├── ui_progcheck.py         进度 / 倒计时真机采样（需浏览器 + 本地服务）
+├── prog_report.py          把采样 JSON 重算成统一指标表
+├── ui_ocrcheck.py          端到端 OCR 验收（需自备扫描件）
+├── verify_share.py         分享包内的 HTML 与工作区成品逐字节比对
 ├── ui_pii_check.py         成品隐私自检：不得出现真实姓名 / 学号
 ├── ui_pii_scan.py          成品格式类隐私扫描：本机路径 / 邮箱 / 手机号 / 身份证
 ├── publish_check.py        发布门禁：扫描将要提交的文件
 ├── shot_demo.py            给 README 出图（截合成数据预览页，无 PII）
-└── rebuild_share_zip.py    重新打包分享 zip
+├── rebuild_share_zip.py    重新打包分享 zip
+├── extract_ppu.py          从成品解出 PPU 引擎源码（更新引擎时用）
+├── extract_models.py       从成品解出 REC / DET / DICT 模型
+├── extract_assets.py       从成品解出 ORT 运行时 JS
+└── onnx_tool.py            极简 ONNX 读写（改造模型用）
 ```
 
 ## 应用模块(`src/app/`)
@@ -91,6 +101,12 @@ sha256 55ad8f466eaa62d45d0e3446bb6b4b2617f387e0a87167ade879ec8e8d3c6db8
 | `ui_static_check.py` | Python | 38 项静态结构断言 |
 | `ui_contrast.py` | Python | 直接读 `src/style.css` 算对比度,25 项 |
 | `ui_pii_scan.py` | Python | 成品里本机路径 / 邮箱 / 手机号 / 身份证 |
+| `verify_share.py` | Python | 分享包内的 HTML 与工作区成品逐字节一致 |
+| `ui_nbsp_check.py` | Python | 状态行分隔符 NBSP 核对 |
+| `ui_cssom.py` | 浏览器 | 状态行 CSSOM 是否真正生效 |
+| `ui_progcheck.py` | 浏览器 | 进度 / 倒计时真机采样 |
+| `prog_report.py` | Python | 采样 JSON → 统一指标表 |
+| `ui_ocrcheck.py` | 浏览器 + 语料 | 端到端 OCR 验收(需自备扫描件) |
 | `launcher_check.py` | Python | 启动器编码约束(见下方「约定」) |
 | `ui_pii_check.py` | Python + 语料 | 成品里真实姓名 / 学号(需 `--corpus` 指到本地语料) |
 | `publish_check.py` | Python + 语料 | **发布门禁**:扫描将要提交到 git 的文件 |

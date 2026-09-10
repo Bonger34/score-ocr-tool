@@ -19,21 +19,14 @@ target/
 # ---------- 内部资料：留在本机，不公开 ----------
 # 规定原文与工作通知（校内文件，且 格式.jpg 含真实学号与姓名）
 notice/
-# 维护者视角的本地文件地图（引用大量本机数据目录）
-工作区索引.md
-# 内部工程过程记录（优化计划、真机实测、交接文档、A/B 报告）
-docs/真机实测报告_OCR_GPU_v2.md
-docs/提升OCR速度优化计划.md
-docs/交接文档_OCR_GPU_v2.md
-docs/交接文档_OCR_GPU_v2.5_UI重构.md
-docs/ocr_ab_bench_report.md
-# 设计与实施过程文档（一次性，用完后本机留档）
-docs/specs/
 # 依赖内部规定 PDF 的提取脚本
 .tools/notice_dump.py
-# 维护者一次性操作单与发版说明（发布完即过期）
-docs/发布流程.md
-.github/release_notes_*.md
+# 一次性的设计与实施过程文档（结论已提炼进 .tools/README.md 与 CHANGELOG）
+docs/specs/
+
+# 维护文档（docs/maintainer/ 下的发版流程、实测报告、交接文档，以及 .github/release_notes_*.md）
+# 自 v2.13 起随仓库提供：公开仓库是贡献者唯一的入口，且本机不再保留副本时这些知识会永久丢失。
+# 真正排除的只有真实数据（见上）与依赖校内文件的脚本。
 
 # ---------- 成品与实验重资产（走 Release / 不入库）----------
 # 成品是构建输出，可随时重建，不入库
@@ -72,6 +65,16 @@ docs/发布流程.md
 !.tools/ui_static_check.py
 !.tools/ui_zipcheck.py
 !.tools/shot_demo.py
+!.tools/verify_share.py
+!.tools/ui_progcheck.py
+!.tools/prog_report.py
+!.tools/ui_ocrcheck.py
+!.tools/ui_cssom.py
+!.tools/ui_nbsp_check.py
+!.tools/extract_ppu.py
+!.tools/extract_models.py
+!.tools/extract_assets.py
+!.tools/onnx_tool.py
 !.tools/demo/
 
 # ---------- 通用垃圾 ----------
