@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""配色对比度自检：从 .tools/ui/style.css 读取色值，按 WCAG 2.1 计算对比度。
+"""配色对比度自检：从 .tools/src/style.css 读取色值，按 WCAG 2.1 计算对比度。
 
 用法: python ui_contrast.py
 """
@@ -7,7 +7,7 @@ import os, re, sys
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CSS = open(os.path.join(BASE, '.tools', 'ui', 'style.css'), encoding='utf-8').read()
+CSS = open(os.path.join(BASE, '.tools', 'src', 'style.css'), encoding='utf-8').read()
 VARS = dict(re.findall(r'--([a-z0-9-]+)\s*:\s*(#[0-9A-Fa-f]{6})', CSS))
 LIT = {'#fff': '#FFFFFF', '#F3F6F1': '#F3F6F1', '#F2F5F0': '#F2F5F0', '#F7F9F6': '#F7F9F6',
        '#6B2A22': '#6B2A22', '#C7D4CA': '#C7D4CA', '#174034': '#174034', '#B6C2BA': '#B6C2BA'}

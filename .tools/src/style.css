@@ -1,0 +1,252 @@
+/* ==========================================================================
+   搜分名单查询 · 视觉系统 v2.5
+   方向：档案室里的名单核对台 —— 纸面、墨、松墨绿（唯一的行动色）、印泥红（仅警示）。
+   字体：思源宋体做展示与数字，微软雅黑做界面；数字一律等宽对齐。
+   唯一的"响"是运行中的作业条，其余全部安静：无渐变墙、无卡片堆、无阴影套件。
+   ========================================================================== */
+:root{
+  color-scheme:light;                       /* 明确只做浅色，避免系统暗色改写表单控件 */
+  --paper:#EAEDE7;                          /* 页面底：淡青灰纸 */
+  --sheet:#FCFDFA;                          /* 纸面：卡片/表格底 */
+  --ink:#17231F;                            /* 墨：正文、深色条 */
+  --ink-2:#55605A;                          /* 次级文字 */
+  --ink-3:#6C7772;                          /* 辅助文字（≥12px 使用，保证对比度） */
+  --rule:#CDD5CC;                           /* 结构线 */
+  --rule-2:#E2E7DF;                         /* 内部细线 */
+  --brand:#1E4D3F;                          /* 松墨绿：主按钮、进度、聚焦环 */
+  --brand-soft:#E4EDE8;
+  --seal:#9C2B23;                           /* 印泥红：只用于警示 */
+  --seal-soft:#FBF1EF;
+  /* 五育色：一律压深到 13px 白底也过 AA（≥4.5:1），彼此可区分且不与印泥红撞色 */
+  --de:#2B5D8A;                             /* 德育 */
+  --zhi:#6A4C93;                            /* 智育 */
+  --ti:#1F6F6B;                             /* 体育 */
+  --mei:#8A5D14;                            /* 美育（比样张深一档，13px 标签过 AA 且与印泥红拉开） */
+  --lao:#4E7A46;                            /* 劳育 */
+  --font-display:"Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;
+  --font-ui:"Microsoft YaHei UI","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px;
+  --r-sm:7px;
+  --focus:0 0 0 3px rgba(30,77,63,.26);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--font-ui);font-size:13.5px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:1120px;margin:0 auto;padding:26px 22px 40px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+/* ---------- 页头：一条细线收住，不做渐变方块 logo ---------- */
+.masthead{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
+  padding-bottom:13px;border-bottom:1px solid var(--rule);margin-bottom:20px;}
+.masthead h1{font-family:var(--font-display);font-size:26px;font-weight:700;line-height:1.2;margin:0;}
+.masthead p{margin:0;font-size:12.5px;color:var(--ink-2);}
+
+/* ---------- 纸面（三块，靠 1px 线+纸缝分隔，不是卡片墙） ---------- */
+.sheet{background:var(--sheet);border:1px solid var(--rule);border-radius:var(--r);
+  padding:20px 22px;margin-bottom:14px;}
+.sheet-h{font-family:var(--font-display);font-size:17px;font-weight:700;line-height:1.3;margin:0 0 14px;}
+.sub{font-family:var(--font-display);font-size:15px;font-weight:700;line-height:1.4;margin:20px 0 0;}
+.hint{font-size:12px;color:var(--ink-3);line-height:1.65;margin:9px 0 0;}
+
+/* ---------- 放入名单 ---------- */
+.drop{display:block;padding:30px 22px;text-align:center;cursor:pointer;background:#fff;
+  border:1px dashed #B4C1B6;border-radius:var(--r);
+  transition:border-color .15s,background-color .15s;}
+.drop:hover{border-color:var(--brand);background:#FBFDFB;}
+.drop.hover{border-color:var(--brand);border-style:solid;background:var(--brand-soft);}
+.drop:focus-within{border-color:var(--brand);border-style:solid;box-shadow:var(--focus);}
+.drop-ic{display:block;margin:0 auto 10px;color:var(--brand);}
+.drop-t{display:block;font-size:14px;color:var(--ink);}
+.drop-h{display:block;font-size:12px;color:var(--ink-3);margin-top:5px;}
+.drop-c{display:none;}                      /* 已选文件后换成这一句 */
+.drop.compact{display:flex;align-items:center;justify-content:center;gap:9px;padding:11px 16px;}
+.drop.compact .drop-ic{width:18px;height:18px;margin:0;}
+.drop.compact .drop-t,.drop.compact .drop-h{display:none;}
+.drop.compact .drop-c{display:inline;font-size:13px;color:var(--ink-2);}
+.filemeta{display:none;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:13px;padding-top:13px;border-top:1px solid var(--rule-2);
+  font-size:12.5px;color:var(--ink-2);}
+
+/* ---------- 查谁：公文式标签栏（左列右对齐标签 + 右列控件） ---------- */
+.rail{display:grid;grid-template-columns:64px 1fr;gap:14px 16px;align-items:start;}
+.rail-k{font-size:12.5px;color:var(--ink-2);text-align:right;padding-top:12px;}
+.rail-v{min-width:0;}
+.input{width:100%;height:44px;padding:0 14px;font-family:inherit;font-size:15px;color:var(--ink);
+  background:#fff;border:1px solid var(--rule);border-radius:var(--r-sm);outline:none;
+  transition:border-color .15s,box-shadow .15s;}
+.input::placeholder{color:#98A29C;}
+.input:focus{border-color:var(--brand);box-shadow:var(--focus);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);
+  background:#fff;border:1px solid var(--rule);border-radius:var(--r-sm);padding:9px 13px;
+  cursor:pointer;transition:border-color .15s,background-color .15s,color .15s;}
+.chip:hover{border-color:var(--brand);color:var(--ink);}
+.chip input{width:15px;height:15px;margin:0;accent-color:var(--brand);}
+.chip:has(input:checked){border-color:var(--brand);background:var(--brand-soft);color:var(--ink);}
+.chip:has(input:focus-visible){box-shadow:var(--focus);}
+.eng{display:flex;flex-wrap:wrap;align-items:center;gap:14px;}
+#engWrap{display:none;}
+.select{height:36px;padding:0 10px;font-family:inherit;font-size:13px;color:var(--ink);
+  background:#fff;border:1px solid var(--rule);border-radius:var(--r-sm);}
+.select:focus{outline:none;border-color:var(--brand);box-shadow:var(--focus);}
+#engStatus{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);}
+.dot{width:8px;height:8px;border-radius:50%;background:#98A29C;flex:none;}
+#engStatus[data-kind="gpu"] .dot{background:var(--brand);}
+#engStatus[data-kind="cpu"] .dot{background:var(--mei);}
+#engStatus[data-kind="check"] .dot{background:var(--ink-3);}  /* 中性灰：靛青只代表德育，不再兼职 */
+#engStatus[data-kind="err"] .dot{background:var(--seal);}
+
+/* ---------- 按钮 ---------- */
+.btn{font-family:inherit;font-size:14px;font-weight:600;color:#fff;background:var(--brand);
+  border:0;border-radius:var(--r-sm);padding:11px 24px;cursor:pointer;
+  transition:background-color .15s;}
+.btn:hover:not(:disabled){background:#174034;}
+.btn:disabled{background:#E4E9E2;color:var(--ink-3);cursor:not-allowed;}  /* 禁用态：白字压浅灰只有 1.8:1，看不清，改成灰底深字 */
+.btn:focus-visible{outline:none;box-shadow:var(--focus);}
+.btn-quiet{font-family:inherit;font-size:12.5px;color:var(--ink-2);background:#fff;
+  border:1px solid var(--rule);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer;}
+.btn-quiet:hover{border-color:var(--brand);color:var(--brand);}
+.btn-quiet:focus-visible{outline:none;box-shadow:var(--focus);}
+/* 结果区两个次要动作：材料包（主）与 Excel（次），描边按钮并排 */
+.result-acts{display:flex;gap:8px;flex-wrap:wrap;}
+#dlxlsx,#dlzip{display:none;align-items:center;gap:6px;font-family:inherit;font-size:13px;font-weight:600;
+  color:var(--ink);background:#fff;border:1px solid var(--rule);border-radius:var(--r-sm);
+  padding:9px 15px;cursor:pointer;transition:border-color .15s,color .15s;}
+#dlxlsx:hover,#dlzip:hover{border-color:var(--brand);color:var(--brand);}
+#dlxlsx:focus-visible,#dlzip:focus-visible{outline:none;box-shadow:var(--focus);}
+#dlzip{border-color:var(--brand);color:var(--brand);}   /* 材料包是新的主推动作 */
+#dlzip:disabled{color:var(--ink-3);border-color:var(--rule);cursor:not-allowed;}
+
+/* ---------- 作业条：全站唯一"响"的地方，只在运行时变深 ---------- */
+.job{display:flex;align-items:center;gap:22px;background:var(--sheet);
+  border:1px solid var(--rule);border-radius:var(--r);padding:15px 22px;margin-bottom:14px;
+  transition:background-color .2s,border-color .2s;}
+.job-pct{display:none;font-family:var(--font-display);font-size:34px;font-weight:700;line-height:1;
+  font-variant-numeric:tabular-nums;}
+.job-main{flex:1;min-width:0;}
+.job-track{display:none;height:6px;border-radius:3px;background:#DCE3DA;overflow:hidden;margin-bottom:10px;}
+.job-fill{height:100%;width:0;border-radius:3px;background:var(--brand);}  /* 不做宽度过渡：数字与条长必须逐帧一致 */
+.job-status{margin:0;font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;
+  overflow-wrap:anywhere;text-wrap:pretty;}  /* 长文件名可断行，但尽量不留孤字/孤符 */
+.job.running{background:var(--ink);border-color:var(--ink);}
+.job.running .job-pct{display:block;color:#F3F6F1;}
+.job.running .job-track{display:block;background:rgba(255,255,255,.18);}
+.job.running .job-fill{background:#8FC7AC;
+  background-image:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.32),rgba(255,255,255,0));
+  background-repeat:no-repeat;background-size:130px 100%;
+  animation:sweep 1.7s linear infinite;}
+.job.running .job-status{color:#C7D4CA;}   /* 深底小字提到约 10:1，原 #B9C7BE 只有 5.5:1 */
+@keyframes sweep{from{background-position:-130px 0;}to{background-position:100vw 0;}}
+
+/* ---------- 结果：台账（横排数字）+ 明细表 ---------- */
+#resultCard{display:none;animation:rise .26s ease-out;}
+@keyframes rise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.result-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.result-head .sheet-h{margin:0;}
+/* 台账列数随"有记录的育"变化（五育齐全时 6 格，只有两三育时不空占位） */
+.ledger{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));background:#fff;
+  border:1px solid var(--rule);border-radius:var(--r-sm);overflow:hidden;}
+.ledger .cell{padding:14px 16px;border-right:1px solid var(--rule-2);min-width:0;}
+.ledger .cell:last-child{border-right:0;}
+.ledger b{display:block;font-family:var(--font-display);font-size:26px;font-weight:700;line-height:1.15;
+  font-variant-numeric:tabular-nums;}
+.ledger span{display:block;font-size:11.5px;color:var(--ink-2);margin-top:6px;}
+.compo{display:flex;height:6px;border-radius:3px;overflow:hidden;background:#E4E9E2;margin-top:14px;}
+.compo i{display:block;height:100%;}
+.t-de{color:var(--de);} .t-zhi{color:var(--zhi);} .t-ti{color:var(--ti);}
+.t-mei{color:var(--mei);} .t-lao{color:var(--lao);} .t-other{color:var(--ink-2);}
+.compo .t-de{background:var(--de);}
+.compo .t-zhi{background:var(--zhi);}
+.compo .t-ti{background:var(--ti);}
+.compo .t-mei{background:var(--mei);}
+.compo .t-lao{background:var(--lao);}
+.compo .t-other{background:var(--ink-3);}
+.alert{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:11px 14px;
+  border-left:3px solid var(--seal);border-radius:0 var(--r-sm) var(--r-sm) 0;
+  background:var(--seal-soft);color:#6B2A22;font-size:12.5px;}
+.alert svg{flex:none;margin-top:2px;}
+.empty{padding:6px 0 2px;}
+.empty-t{font-family:var(--font-display);font-size:17px;font-weight:700;margin:0;}
+
+/* ---------- 表格：表头浅底 + 墨色合计线，数字右对齐等宽 ---------- */
+.tablewrap{overflow-x:auto;margin-top:12px;border:1px solid var(--rule);border-radius:var(--r-sm);}
+table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;}
+thead th{background:#F2F5F0;color:var(--ink-2);font-size:12px;font-weight:600;
+  white-space:nowrap;border-bottom:1px solid var(--rule);}
+tbody td{border-bottom:1px solid var(--rule-2);}
+tbody tr:last-child td{border-bottom:0;}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.fname{word-break:break-all;}
+.sid{font-variant-numeric:tabular-nums;white-space:nowrap;}
+.sid.na{color:var(--ink-3);}
+.tag{font-weight:600;}
+tfoot th,tfoot td{background:#F7F9F6;font-weight:700;white-space:nowrap;
+  border-top:2px solid var(--ink);padding-top:11px;padding-bottom:11px;}
+tr.dup td{background:var(--seal-soft);color:#6B2A22;}
+
+/* ---------- 明细清单：按综测报送格式排（学号·姓名 → 五育测评 → +分值（事由）） ----------
+   不用表格而用嵌套清单：层级本身就是信息，表格会把"谁属于哪一育"压平。
+   每块一人、每段一育，行内三列 = 加分值 / 事由 / 来源文件。 */
+.mperson{border:1px solid var(--rule);border-radius:var(--r-sm);background:#fff;margin-top:12px;overflow:hidden;}
+.mp-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:11px 14px;background:#F2F5F0;border-bottom:1px solid var(--rule);}
+.mp-id{margin:0;font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:.01em;}
+.mp-id i{color:var(--ink-3);font-style:normal;margin:0 7px;}
+.mp-na{font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--ink-3);}
+.mp-tot{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;}
+.mp-tot b{font-family:var(--font-display);font-size:16px;color:var(--ink);}
+.mp-yu{border-top:1px solid var(--rule-2);}
+.mp-yuhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0;
+  padding:9px 14px;background:#FBFCFA;font-size:12.5px;font-weight:600;color:var(--ink-2);}
+.mp-yuhead .tag{font-size:13px;}
+.mp-yusum{font-family:var(--font-display);font-size:14px;font-variant-numeric:tabular-nums;color:var(--ink);}
+.mp-cnt{font-weight:400;color:var(--ink-3);}
+.mp-cap{font-weight:600;color:var(--seal);}
+.mp-items{list-style:none;margin:0;padding:0;}
+.mp-item{display:grid;grid-template-columns:60px minmax(0,1fr) minmax(0,220px);gap:12px;
+  align-items:baseline;padding:8px 14px;border-top:1px solid var(--rule-2);font-size:13px;}
+.mp-item:first-child{border-top:0;}
+.mp-v{font-family:var(--font-display);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;}
+.mp-why{color:var(--ink);overflow-wrap:anywhere;}
+.mp-src{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ---------- 重复副本：默认折叠 ---------- */
+.dups{margin-top:16px;border:1px solid var(--rule);border-radius:var(--r-sm);background:#fff;}
+.dups summary{cursor:pointer;padding:11px 14px;font-size:13px;font-weight:600;color:var(--ink-2);}
+.dups summary:hover{color:var(--ink);}
+.dups summary:focus-visible{outline:none;box-shadow:var(--focus);border-radius:var(--r-sm);}
+.dups[open] summary{border-bottom:1px solid var(--rule-2);}
+.dups .tablewrap{margin:0;border:0;border-radius:0;}
+.dups .hint{padding:0 14px 12px;margin:10px 0 0;}
+
+footer{margin-top:22px;padding-top:13px;border-top:1px solid var(--rule);
+  font-size:12px;color:var(--ink-2);}   /* 纸底上用 ink-3 只有 3.9:1，提到 ink-2 */
+
+/* ---------- 窄屏：标签栏转竖排，台账转清单，进度条不变 ---------- */
+@media (max-width:760px){
+  .page{padding:18px 14px 32px;}
+  .sheet{padding:16px 15px;}
+  .rail{grid-template-columns:1fr;gap:6px 0;}
+  .rail-k{text-align:left;padding-top:0;font-weight:600;color:var(--ink);}
+  .rail-k+.rail-v{margin-bottom:12px;}
+  .rail-v:last-child{margin-bottom:0;}
+  .ledger{grid-template-columns:1fr;}
+  .ledger .cell{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    padding:11px 15px;border-right:0;border-bottom:1px solid var(--rule-2);}
+  .ledger .cell:last-child{border-bottom:0;}
+  .ledger b{font-size:20px;}
+  .ledger span{margin:0;}
+  .job{flex-wrap:wrap;gap:14px;padding:14px 15px;}
+  .job.running .job-pct{font-size:28px;}
+  .result-head{flex-wrap:wrap;}
+  .mp-head{padding:10px 12px;}
+  .mp-item{grid-template-columns:54px minmax(0,1fr);gap:4px 10px;padding:9px 12px;}
+  .mp-src{grid-column:2;font-size:11px;}   /* 窄屏把来源文件折到事由下一行 */
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;}
+}

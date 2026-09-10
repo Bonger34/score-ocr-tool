@@ -1,4 +1,4 @@
-/* 检索明细渲染的确定性单测：把 .tools/ui/render.js 的真实源码抽出来，
+/* 检索明细渲染的确定性单测：把 .tools/src/app/85-render.js 的真实源码抽出来，
  * 配一层假 DOM + 假 parseType，喂合成数据，断言"格式"与"上限提醒"都对。
  * 真机跑不出德育 > 25 的样本（本次语料最大才 2 分），这条分支只能在这里覆盖。
  *
@@ -8,8 +8,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const src = fs.readFileSync(path.join(__dirname, 'ui', 'render.js'), 'utf8') + '\n' +
-            fs.readFileSync(path.join(__dirname, 'ui', 'zip.js'), 'utf8');
+const src = fs.readFileSync(path.join(__dirname, 'src', 'app', '85-render.js'), 'utf8') + '\n' +
+            fs.readFileSync(path.join(__dirname, 'src', 'app', '95-material.js'), 'utf8');
 
 // ---- 假 DOM：$() 返回带 innerHTML/style 的对象 ----
 const nodes = {};

@@ -2,8 +2,9 @@
 # 整块替换进 42MB 基线 HTML，任何换行符差异都会改变成品 sha256。
 * text=auto eol=lf
 
-# 42MB 构建底座：按二进制处理，避免 git 当文本做行尾转换与 diff
-.tools/v24_ui_baseline.html binary
+# 构建资产（约 42MB：第三方库 + 模型 base64 文本）：按二进制处理，
+# 避免 git 当文本做行尾转换与逐行 diff
+.tools/assets/** binary
 
 # 二进制：不做行尾与差异处理
 *.pdf binary

@@ -77,20 +77,25 @@
 
 ### 给开发者：从源码构建
 
-成品由 `.tools/build_v25_ui.py` **确定性生成**——同样的输入必然得到同样的 sha256。
+成品由 `.tools/build.py` **确定性生成**——同样的输入必然得到同样的 sha256。
 
 ```bash
-# 基线 .tools/v24_ui_baseline.html 已随仓库提供（42MB，含应用内核与内嵌模型/第三方库），
-# clone 下来即可构建，无需额外下载：
-python .tools/build_v25_ui.py
+# 源码与构建资产都已随仓库提供（clone 下来即可构建，无需联网）：
+python .tools/build.py
 # 输出: 搜分名单查询工具.html
 ```
 
-构建脚本只做一件事：把 `.tools/ui/` 下的 5 个源码文件，**整块替换**进基线 HTML 的对应位置
-（`<style>`、body 标记、`render()`、进度引擎、Excel 导出块），并对 28 处 JS 锚点做
-`count == 1` 断言——锚点对不上就报错退出，绝不静默改坏文件。
+构建脚本只做一件事：**按固定顺序拼接**。
 
-所以日常改界面只需要动 `.tools/ui/` 里的文件，**永远不要手工编辑那个 44MB 的 HTML**。
+| 输入 | 位置 |
+|---|---|
+| 模板 | `.tools/src/template.html`（约 1 KB 骨架，含 9 个槽位占位符） |
+| 应用源码 | `.tools/src/app/*.js`（16 个模块，按 `SOURCES` 清单顺序拼接） |
+| 界面样式 / 标记 | `.tools/src/style.css`、`.tools/src/body.html` |
+| 构建资产 | `.tools/assets/*`（pdf.js / JSZip / Tesseract / onnxruntime-web + OCR 模型） |
+
+没有「查找旧文本再替换」的锚点补丁：**改哪个功能就编辑哪个模块文件**，构建脚本不用动。
+**永远不要手工编辑那个 44 MB 的 HTML。**
 
 ## 结果长什么样
 
@@ -119,7 +124,7 @@ python .tools/shot_demo.py        # 重新出图（需 Playwright）
 | 体育 / 美育 / 劳育 | 不在此汇总设上限，按单项规定执行 | — |
 
 五育顺序固定为 **德 → 智 → 体 → 美 → 劳**，与报送表一致。
-上限表在 `.tools/ui/render.js` 的 `YU_CAP` 里，换学校改这一处即可。
+上限表在 `.tools/src/app/85-render.js` 的 `YU_CAP` 里，换学校改这一处即可。
 
 ## 材料包目录结构
 
@@ -151,9 +156,11 @@ python .tools/shot_demo.py        # 重新出图（需 Playwright）
 ├── 打开工具.cmd                 # 唯一的启动器（强制独显打开）
 ├── docs/截图/                   # README 用图（合成数据）
 └── .tools/                      # 源码、构建输入与校验脚本（见 .tools/README.md）
-    ├── v24_ui_baseline.html     # 42MB 构建底座：应用内核 + 内嵌模型/第三方库
-    ├── build_v25_ui.py          # 唯一构建入口
-    ├── ui/                      # 真正手写的界面源码（6 个文件）
+    ├── build.py                 # 唯一构建入口（纯字节拼接）
+    ├── src/template.html        # 约 1KB 骨架，9 个槽位
+    ├── src/app/*.js             # 应用源码，16 个模块（含 render / 导出 / 材料包）
+    ├── src/style.css  body.html # 界面样式与标记
+    ├── assets/                  # 构建资产：第三方库 + OCR 模型（约 42MB）
     ├── demo/ui_demo.html        # 合成数据 UI 预览
     └── ui_*.py / render_unit.js # 校验脚本
 
@@ -201,14 +208,14 @@ python .tools/shot_demo.py        # 重新出图（需 Playwright）
 A：OCR 模型（检测 + 识别）、ORT 运行时、pdf.js、Tesseract.js、JSZip 全部内嵌在同一个文件里，
 这是「单文件离线可用」的代价。构建产物走 Releases 附件，不进 git 历史。
 
-**Q：`.tools/v24_ui_baseline.html` 是什么？**
-A：它是**构建输入，不是成品**——42 MB 的单文件底座，里面装着应用内核（解析、OCR 调度、
-去重等逻辑）和内嵌的 OCR 模型 / 第三方库。`build_v25_ui.py` 从它出发，把界面层整块替换掉，
-产出成品。所以它随仓库提供，clone 下来即可构建；它本身是一个旧版界面，**别双击**。
+**Q：`.tools/assets/` 里的 42 MB 是什么？**
+A：**构建资产，不是成品**——4 个第三方库（pdf.js / JSZip / Tesseract.js / onnxruntime-web）
+与 2 个 OCR 模型数据块。`build.py` 把它们按槽位拼进模板，产出成品。
+它们随仓库提供，clone 下来即可构建，无需联网下载。
 
 **Q：换一个学校能用吗？**
-A：可以。五育上限集中在 `.tools/ui/render.js` 的 `YU_CAP`，育别顺序在 `YU`，
-材料包目录名在 `.tools/ui/zip.js` 的 `YU_DIR`，改完重新构建即可。
+A：可以。五育上限集中在 `.tools/src/app/85-render.js` 的 `YU_CAP`，育别顺序在同文件的 `YU`，
+材料包目录名在 `.tools/src/app/95-material.js` 的 `YU_DIR`，改完重新构建即可。
 
 **Q：扫描件识别慢？**
 A：勾选「识别扫描件」后走 OCR，速度取决于页数；GPU 可用时用 WebGPU 引擎，不可用时回退

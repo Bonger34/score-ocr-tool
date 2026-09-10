@@ -27,6 +27,8 @@ docs/提升OCR速度优化计划.md
 docs/交接文档_OCR_GPU_v2.md
 docs/交接文档_OCR_GPU_v2.5_UI重构.md
 docs/ocr_ab_bench_report.md
+# 设计与实施过程文档（一次性，用完后本机留档）
+docs/specs/
 # 依赖内部规定 PDF 的提取脚本
 .tools/notice_dump.py
 # 维护者一次性操作单与发版说明（发布完即过期）
@@ -52,9 +54,10 @@ docs/发布流程.md
 .tools/*
 !.tools/README.md
 !.tools/build_v24.py
-!.tools/build_v25_ui.py
-# 构建输入（42MB 底座）：应用内核 + 内嵌模型/第三方库，构建必需，故入库
-!.tools/v24_ui_baseline.html
+!.tools/build.py
+# 构建输入：模板 + 资产 + 源码
+!.tools/src/
+!.tools/assets/
 !.tools/render_unit.js
 !.tools/launcher_check.py
 !.tools/publish_check.py
@@ -65,13 +68,11 @@ docs/发布流程.md
 !.tools/ui_contrast.py
 !.tools/ui_pii_check.py
 !.tools/ui_pii_scan.py
-!.tools/ui_regress.py
 !.tools/ui_shot.py
 !.tools/ui_static_check.py
 !.tools/ui_zipcheck.py
 !.tools/shot_demo.py
 !.tools/demo/
-!.tools/ui/
 
 # ---------- 通用垃圾 ----------
 __pycache__/

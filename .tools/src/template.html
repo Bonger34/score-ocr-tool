@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>搜分名单查询工具（单文件离线版）</title>
+<!-- 内联 SVG 图标：离线单文件不能外链，顺带消掉 favicon 的 404 -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231E4D3F'/%3E%3Ctext x='16' y='23' font-family='serif' font-size='19' fill='%23F3F6F1' text-anchor='middle'%3E%E5%88%86%3C/text%3E%3C/svg%3E">
+<style>
+@@SLOT:style@@
+</style>
+</head>
+<body>
+@@SLOT:body@@
+
+<script type="text/plain" id="pdfworker">@@SLOT:pdfworker@@</script>
+<script>@@SLOT:jszip@@</script>
+<script>@@SLOT:pdfjs@@</script>
+<script>@@SLOT:tesseract@@</script>
+<script>@@SLOT:ocrAssets@@</script>
+<script type="text/plain" id="gpuassets">@@SLOT:gpuAssets@@</script>
+<script>@@SLOT:app@@</script>
+
+
+</body></html>

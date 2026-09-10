@@ -1,0 +1,94 @@
+<div class="page">
+  <header class="masthead">
+    <h1>搜分名单查询</h1>
+    <p>名单文件不上传，全部在本机解析。</p>
+  </header>
+
+  <main>
+    <!-- ① 放入名单：整个拖放区就是一个 label，点击/键盘都能选文件 -->
+    <section class="sheet">
+      <h2 class="sheet-h">放入名单</h2>
+      <label class="drop" id="drop" for="file">
+        <svg class="drop-ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 3v5h5"/>
+          <path d="M12 11v5"/>
+          <path d="M9.8 13.8 12 16l2.2-2.2"/>
+        </svg>
+        <span class="drop-t">把 zip、PDF 或 Excel 拖到这里</span>
+        <span class="drop-h">也可以点击选择文件，支持多选</span>
+        <span class="drop-c">继续添加文件</span>
+        <input id="file" class="sr-only" type="file" multiple accept=".zip,.pdf,.xlsx,.xlsm,.txt,.csv">
+      </label>
+      <div class="filemeta" id="fileMetaWrap">
+        <span id="fileMeta"></span>
+        <button type="button" class="btn-quiet" onclick="clearFiles()">清空</button>
+      </div>
+    </section>
+
+    <!-- ② 查谁：左列标签右对齐，右列控件；窄屏自动转竖排 -->
+    <section class="sheet">
+      <h2 class="sheet-h">查谁</h2>
+      <div class="rail">
+        <label class="rail-k" for="kw">姓名</label>
+        <div class="rail-v">
+          <input id="kw" class="input" type="text" placeholder="输入要检索的姓名" autocomplete="off">
+        </div>
+
+        <span class="rail-k">选项</span>
+        <div class="rail-v">
+          <div class="chips">
+            <label class="chip"><input id="dedup" type="checkbox" checked><span>自动去重</span></label>
+            <label class="chip"><input id="ocr" type="checkbox"><span>识别扫描件</span></label>
+            <label class="chip"><input id="fuzzy" type="checkbox" aria-describedby="matchHint"><span>模糊匹配</span></label>
+          </div>
+          <p class="hint" id="matchHint">默认整名匹配；勾「模糊匹配」按字串命中，输入一个字也能捞到含该字的姓名。扫描件需勾「识别扫描件」，较慢。</p>
+        </div>
+
+        <span class="rail-k">引擎</span>
+        <div class="rail-v eng">
+          <label id="engWrap"><span class="sr-only">选择 OCR 引擎</span>
+            <select id="eng" class="select">
+              <option value="auto">自动（GPU，失败转内置）</option>
+              <option value="tess">内置（兼容）</option>
+            </select>
+          </label>
+          <span id="engStatus" data-kind="check"><i id="engDot" class="dot" aria-hidden="true"></i><span id="engText">OCR 引擎待检测</span></span>
+        </div>
+
+        <span class="rail-k"></span>
+        <div class="rail-v">
+          <button type="button" class="btn" id="runBtn" disabled onclick="handleRun()">开始解析</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 作业条：空闲时是纸面提示，运行时整条变墨色 -->
+    <div class="job" id="jobStrip">
+      <div class="job-pct"><span id="barpct">0%</span></div>
+      <div class="job-main">
+        <div class="job-track" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="解析进度"><div class="job-fill" id="barfill"></div></div>
+        <p class="job-status" id="status">先放入名单文件，再点「开始解析」。</p>
+      </div>
+    </div>
+    <p class="sr-only" id="announce" role="status"></p>
+
+    <!-- ③ 检索结果 -->
+    <section class="sheet" id="resultCard">
+      <div class="result-head">
+        <h2 class="sheet-h">检索结果</h2>
+        <div class="result-acts">
+          <button type="button" id="dlzip" onclick="return exportMaterialZip()"
+                  title="按 学号姓名/五育测评/+分值 (事由) 的目录结构打包命中的名单原件">导出材料包</button>
+          <button type="button" id="dlxlsx" onclick="return exportNow()">导出 Excel 汇总</button>
+        </div>
+      </div>
+      <div id="summary"></div>
+      <div id="detail"></div>
+      <div id="dupbox" style="display:none"></div>
+    </section>
+  </main>
+
+  <footer>数据只在本机浏览器里处理，不会上传到任何服务器。</footer>
+</div>

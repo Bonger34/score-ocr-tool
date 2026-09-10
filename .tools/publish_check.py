@@ -23,6 +23,10 @@ SKIP_DIRS = {'.git', 'node_modules', 'target', '.samples', '.screenshots',
 SKIP_EXT = {'.pdf', '.jpg', '.jpeg', '.png', '.gif', '.webp', '.ico', '.onnx', '.ort',
             '.zip', '.xlsx', '.xls', '.docx', '.woff', '.woff2', '.ttf', '.exe', '.dll'}
 MAX_BYTES = 3 * 1024 * 1024          # 单个文件扫描上限，超出的只登记不扫
+# 第三方库 / 模型资产：里面的「本机路径」是库自身的 Node 路径检测正则
+# （如 pdf.js 的 /^[a-zA-Z]:\//），不是本项目隐私。
+# 这类目录跳过格式类检查，但**姓名 / 学号仍照常检查**。
+VENDOR_DIRS = ('.tools/assets',)
 # 白名单：GitHub 的 noreply 地址本身就是给公开提交用的，不算隐私
 EMAIL_ALLOW = ('@users.noreply.github.com',)
 SURNAMES = ('王李张刘陈杨黄赵吴周徐孙马朱胡郭何高林罗郑梁谢宋唐许韩冯邓曹彭曾肖田董袁潘于蒋蔡余杜叶'
@@ -175,12 +179,13 @@ def main():
             skipped.append(rel)
             continue
         scanned += 1
-        for label, pat in PATTERNS:
-            for m in pat.finditer(text):
-                val = m.group(0)
-                if label == '邮箱' and val.lower().endswith(EMAIL_ALLOW):
-                    continue
-                problems.append((rel, label, val[:60]))
+        if not rel.replace('\\', '/').startswith(VENDOR_DIRS):
+            for label, pat in PATTERNS:
+                for m in pat.finditer(text):
+                    val = m.group(0)
+                    if label == '邮箱' and val.lower().endswith(EMAIL_ALLOW):
+                        continue
+                    problems.append((rel, label, val[:60]))
         if serials:
             for m in re.finditer(r'(?<!\d)\d{9,13}(?!\d)', text):
                 if m.group(0) in serials:
